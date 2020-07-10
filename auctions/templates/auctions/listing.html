@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    
+        <h3>{{ item.title |title }}</h3>
+        <p>{{ item.description }}</p>
+        <p>Current Bid: 
+            {% if item.current_bid %}
+                ${{ item.current_bid }}
+            {% else %}
+                ${{ item.start_bid }}
+            {% endif %} </p>
+        <img class="list_image" src="{{ item.list_image}}" alt="Image of {{ item.title }}">
+    
+        <div class="container row">
+            <h3>Place Bid</h3>
+            <form action="{% url 'listing' %}" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                       
+                <input class="btn waves-effect waves-light" type="submit" value="Submit">
+            </form>
+        
+        </div>
+
+{% endblock %}

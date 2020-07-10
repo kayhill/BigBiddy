@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+<div class="container row">
+    <h2>Log In</h2>
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="input-field col s9">
+            <input autofocus class="validate" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="input-field col s9">
+            <input class="validate" type="password" name="password" placeholder="Password">
+        </div>
+    </div>
+    <div class="container row">
+        <div class="col s9">
+            <button class="btn waves-effect waves-light" type="submit">
+                Login
+             </button>
+             <p>Don't have an account? <a href="{% url 'register' %}">Register here.</a></p>
+        </div>
+    </div>
+        
+    </form>
+    
+
+    
+</div>
+
+{% endblock %}

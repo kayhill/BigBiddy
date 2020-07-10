@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div>
+            
+    {% if user.is_authenticated %}
+        <p class="flow-text">Hello, <strong>{{ user.username |title }}</strong>!</p>
+    {% endif %}
+    
+</div>
+    <h2>Active Listings</h2>
+
+    {% for a in active %}
+       <a href="{% url 'listing' a.title %}"><li>{{ a.title |title }}</li></a>
+    {% endfor %} 
+
+{% endblock %}

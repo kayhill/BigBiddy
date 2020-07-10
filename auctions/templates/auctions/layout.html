@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}ShhBid{% endblock %}</title>
+        
+      <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      
+      <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="{% static 'auctions/materialize/css/materialize.css' %}"  media="screen,projection"/>
+        <link type="text/css" media="screen,projection" rel="stylesheet" href="{% static 'auctions/styles.css' %}">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+        
+        <nav class="teal lighten-2">
+            <div class="nav-wrapper">
+              <a href="" class="brand-logo">ShhBid</a>
+              <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="{% url 'index' %}">Active Listings</a></li>
+
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'sell' %}">Sell</a></li>
+                <li><a href="{% url 'watchlist' %}">Watchlist</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+
+
+                {% else %}
+
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+        <!--Mobile Navbar-->
+          <ul class="sidenav" id="mobile-demo">
+            <li><a href="{% url 'index' %}">Active Listings</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'sell' %}">Sell</a></li>
+                <li><a href="{% url 'watchlist' %}">Watchlist</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+          </ul>
+        
+        
+               
+        {% block body %}
+        {% endblock %}
+
+        <!--JavaScript at end of body for optimized loading-->
+        <script type="text/javascript" src="{% static 'auctions/script.js' %}"></script>
+        <script type="text/javascript" src="{% static 'auctions/materialize/js/materialize.js' %}"></script>
+    </body>
+</html>
