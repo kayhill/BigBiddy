@@ -11,7 +11,13 @@
     <h2>Active Listings</h2>
 
     {% for a in active %}
-       <a href="{% url 'listing' a.title %}"><li>{{ a.title |title }}</li></a>
+       <a href="{% url 'listing' item=a.title %}"><li>{{ a.title |title }}</li></a>
+    {% endfor %} 
+
+    <h2>Closed Auctions</h2>
+
+    {% for c in closed %}
+       <a href="{% url 'listing' item=c.title %}"><li>{{ c.title |title }}</li></a>
     {% endfor %} 
 
 {% endblock %}

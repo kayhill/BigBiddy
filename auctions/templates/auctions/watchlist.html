@@ -1,6 +1,11 @@
 {% extends "auctions/layout.html" %}
 
-{% block body %}
-    <h2>Watchlist</h2>
 
+{% block body %}
+    
+    <h2>{{ user.username |title }}'s Watchlist</h2>
+    
+    {% for w in wlist %}
+        <a href="{% url 'listing' item=w.item.title %}"><li>{{ w.item.title |title }}</li></a>
+    {% endfor %} 
 {% endblock %}

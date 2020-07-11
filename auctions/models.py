@@ -1,6 +1,18 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+TRAVEL = 'TR'
+FOOD = 'FD'
+CLOTHING = 'CL'
+ADVENTURE = 'AV'
+OTHER = 'OT'
+CATEGORY_CHOICES = [
+    (TRAVEL, 'Travel'),
+    (FOOD, 'Food'),
+    (CLOTHING, 'Clothing'),
+    (ADVENTURE, 'Adventure'),
+    (OTHER, 'Other'),
+]
 
 class User(AbstractUser):
     pass
@@ -13,8 +25,10 @@ class Listing(models.Model):
     list_image = models.URLField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
-    current_bid = models.ForeignKey('Bid', on_delete=models.CASCADE, null=True, blank=True)
-        
+    
+    category = models.CharField(max_length=2, choices=CATEGORY_CHOICES,
+        default=TRAVEL)
+            
     def __str__(self):
         return(f'{self.title} listed by {self.user.username}')
 
@@ -24,11 +38,14 @@ class Bid(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-value']
+
     def __str__(self):
         return(f'${self.value}')
 
 class Comment(models.Model):
-    post = models.ForeignKey(Listing,on_delete=models.CASCADE, related_name='comment')
+    post = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='comment')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -39,3 +56,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.user.username)
+
+class Watch(models.Model):
+    item = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return(f'{self.item.title}')
+
+

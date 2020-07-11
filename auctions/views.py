@@ -6,12 +6,12 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from django import forms
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment, Watch
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = '__all__'
+        exclude = ['user', 'created_on', 'post', 'active']
 
 class ListingForm(forms.ModelForm):
     class Meta:
@@ -26,8 +26,10 @@ class BidForm(forms.ModelForm):
 
 def index(request):
     active = Listing.objects.filter(active=True)
+    closed = Listing.objects.filter(active=False)
     return render(request, "auctions/index.html", {
         "active": active,
+        "closed": closed,
     })
 
 
@@ -82,7 +84,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-
+@login_required
 def sell(request):
     f = ListingForm(request.POST or None)
     if f.is_valid():
@@ -97,41 +99,99 @@ def sell(request):
         "form": f 
         })
 
-def watchlist(request):
+@login_required
+def add_watch(request, item):
+    itemforsale = Listing.objects.filter(title=item).first()
+    Watch(user=request.user, item=itemforsale).save()
     
-    return render(request, "auctions/watchlist.html")
+    return HttpResponseRedirect(reverse("watchlist"))
+
+@login_required
+def remove_watch(request, item):
+    itemforsale = Listing.objects.filter(title=item).first()
+    watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()
+    watchlist.delete()   
+    
+    return HttpResponseRedirect(reverse("watchlist"))
+        
+@login_required
+def watch(request):
+    watchlist = Watch.objects.filter(user=request.user)
+    return render(request, "auctions/watchlist.html", {
+        "wlist": watchlist,
+        "user": request.user
+    })
+
 
 def listing(request, item):
     itemforsale = Listing.objects.filter(title=item).first()
+    comments = Comment.objects.filter(post=itemforsale.id)
+    highbid = Bid.objects.filter(item=itemforsale.id).first()
+    watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()   
+
     if itemforsale == None:
+        return render(request, "auctions/error.html")            
+   
+    return render(request, "auctions/listing.html", {
+            "item": itemforsale,
+            "highbid": highbid,
+            "startbid": itemforsale.start_bid,
+            "form": BidForm,
+            "commform": CommentForm,
+            "comments": comments,
+            "user": request.user,
+            "watchlist": watchlist
+        })
+
+@login_required
+def comment(request, item):
+    c = CommentForm(request.POST)
+    itemforsale = Listing.objects.filter(title=item).first()
+    if c.is_valid():
+        comm = c.save(commit=False)
+        comm.post = itemforsale
+        comm.user = request.user
+        comm.save()
+        return HttpResponseRedirect(reverse("listing", args=[item]))
+
+    else:
         return render(request, "auctions/error.html")
-    
-    b = BidForm(request.POST or None)
-    if itemforsale.current_bid == None:
+
+def category(request):
+    return render(request, "auctions/category.html", {
+    })
+
+@login_required
+def bid(request, item):
+    itemforsale = Listing.objects.filter(title=item).first()
+    highbid = Bid.objects.filter(item=itemforsale.id).first()
+
+    b = BidForm(request.POST)
+
+    if highbid == None:
         cbid = itemforsale.start_bid
     else:
-        cbid = itemforsale.current_bid
-        
+        cbid = highbid.value
+
     if b.is_valid():
         bid = b.save(commit=False)
-        bid.title = item
+        bid.item = itemforsale
         bid.user = request.user
         if bid.value <= cbid:
             return render(request, "auctions/error.html")
         else:
-            bid.save()
-            itemforsale.current_bid = bid.value
-            return render(request, "auctions/listing.html", {
-            "item": itemforsale,
-            "form": b
-        })
-
-    return render(request, "auctions/listing.html", {
-            "item": itemforsale,
-            "form": b
-        })
+            bid.save()                     
+            return HttpResponseRedirect(reverse("listing", args=[item]))
+    else:
+        return render(request, "auctions/error.html")
 
 
-    
+@login_required
+def end(request, item):
 
+    itemclose = Listing.objects.filter(title=item).first()
+    itemclose.active = False
+    itemclose.save(update_fields=['active'])
+
+    return HttpResponseRedirect(reverse("listing", args=[item]))
     
