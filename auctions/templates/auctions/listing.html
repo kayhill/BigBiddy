@@ -9,8 +9,11 @@
 
     <div class="container">
         <h3>{{ item.title |title }}</h3>
-        <p>Posted by {{ item.user |title }} </p>
-        <p>{{ item.description }}</p>
+        <p class="flow-text">Posted by {{ item.user |title }} </p>
+        <p class="flow-text">{{ item.description }}
+            {% lorem %}
+        </p>
+        <p>Category: <a href="{% url 'pick_category' category='TR' %}"> {{ category |title }}</a></p>
         <img class="list_image" src="{{ item.list_image}}" alt="Image of {{ item.title }}">
         
         
@@ -47,7 +50,13 @@
 
             {% elif user %}    
             <h3>Place Bid</h3>
-            <p>Bid must be greater than current bid. All bids must be whole dollar amounts. For example, $20 is a valid bid. $20.50 is an INVALID bid.</p>
+                {% if messages %}
+                    {% for message in messages %}
+	                    <h5 class="red-text large">{{ message }}</h5>
+	                {% endfor %}
+                {% endif %}
+                
+            <p>Bid must be greater than current bid. All bids must be whole dollar amounts.</p>
             <form action="{% url 'bid' item.title %}" method="POST">
                 {% csrf_token %}
                 {{ form }}                    
@@ -75,7 +84,7 @@
     <div class="container">
         
         {% for comment in comments %}
-            <blockquote class="flowtext">{{ comment.body }} <br> posted by {{ comment.user |title}} on {{ comment.created_on }}
+            <blockquote class="flow-text">{{ comment.body }} <br> posted by {{ comment.user |title}} on {{ comment.created_on }}
             </blockquote>
         
         {% endfor %}

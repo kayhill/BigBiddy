@@ -2,10 +2,11 @@
 
 
 {% block body %}
-    
+<div class="container">
     <h2>{{ user.username |title }}'s Watchlist</h2>
     
     {% for w in wlist %}
         <a href="{% url 'listing' item=w.item.title %}"><li>{{ w.item.title |title }}</li></a>
     {% endfor %} 
+</div>
 {% endblock %}

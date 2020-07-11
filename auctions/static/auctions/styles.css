@@ -10,3 +10,7 @@ h2 {
 .list_image {
     height: 300px;
 }
+
+form label {
+    font-size: 2em;
+}

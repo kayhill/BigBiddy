@@ -1,33 +1,34 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-TRAVEL = 'TR'
-FOOD = 'FD'
-CLOTHING = 'CL'
-ADVENTURE = 'AV'
-OTHER = 'OT'
-CATEGORY_CHOICES = [
-    (TRAVEL, 'Travel'),
-    (FOOD, 'Food'),
-    (CLOTHING, 'Clothing'),
-    (ADVENTURE, 'Adventure'),
-    (OTHER, 'Other'),
-]
+
 
 class User(AbstractUser):
     pass
 
 
 class Listing(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
     description = models.TextField()
     start_bid = models.PositiveSmallIntegerField(default=0)
     list_image = models.URLField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
-    
-    category = models.CharField(max_length=2, choices=CATEGORY_CHOICES,
-        default=TRAVEL)
+
+    TRAVEL = 'TR'
+    FOOD = 'FD'
+    CLOTHING = 'CL'
+    ADVENTURE = 'AV'
+    OTHER = 'OT'
+    CATEGORY_CHOICES = [
+        (TRAVEL, 'Travel'),
+        (FOOD, 'Food'),
+        (CLOTHING, 'Clothing'),
+        (ADVENTURE, 'Adventure'),
+        (OTHER, 'Other'),
+    ]
+
+    category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, blank=False, null=False)
             
     def __str__(self):
         return(f'{self.title} listed by {self.user.username}')

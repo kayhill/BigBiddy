@@ -2,11 +2,11 @@
 
 {% block body %}
 <div class="container row">
-    <h2>Sell Item</h2>
+    <h2>List Your Item</h2>
     <form action="{% url 'sell' %}" method="POST">
         {% csrf_token %}
         {{ form }}
-               
+          
         <input class="btn waves-effect waves-light" type="submit" value="Submit">
     </form>
 

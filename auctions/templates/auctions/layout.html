@@ -3,7 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}ShhBid{% endblock %}</title>
+        <title>{% block title %}BigBiddy{% endblock %}</title>
+
+      <!--jQuery to display form choices in materialize.css-->
+      <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script>
+        $(document).ready(function() {
+        $('select').formSelect();
+      });
+      </script>
         
       <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -19,7 +27,7 @@
         
         <nav class="teal lighten-2">
             <div class="nav-wrapper">
-              <a href="" class="brand-logo">ShhBid</a>
+              <a href="{% url 'home' %}" class="brand-logo">BigBiddy</a>
               <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
               <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="{% url 'index' %}">Active Listings</a></li>
@@ -55,9 +63,10 @@
                
         {% block body %}
         {% endblock %}
-
+        
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="{% static 'auctions/script.js' %}"></script>
         <script type="text/javascript" src="{% static 'auctions/materialize/js/materialize.js' %}"></script>
     </body>
+  
 </html>

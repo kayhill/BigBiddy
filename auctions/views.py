@@ -1,22 +1,40 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django import forms
+from django.forms import Textarea, Select
 from .models import User, Listing, Bid, Comment, Watch
+
+TRAVEL = 'TR'
+FOOD = 'FD'
+CLOTHING = 'CL'
+ADVENTURE = 'AV'
+OTHER = 'OT'
+CATEGORY_CHOICES = [
+    (TRAVEL, 'Travel'),
+    (FOOD, 'Food'),
+    (CLOTHING, 'Clothing'),
+    (ADVENTURE, 'Adventure'),
+    (OTHER, 'Other'),
+]
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['user', 'created_on', 'post', 'active']
+        
 
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
         exclude = ['current_bid', 'user', 'active']
+        
 
 class BidForm(forms.ModelForm):
     class Meta:
@@ -27,6 +45,7 @@ class BidForm(forms.ModelForm):
 def index(request):
     active = Listing.objects.filter(active=True)
     closed = Listing.objects.filter(active=False)
+     
     return render(request, "auctions/index.html", {
         "active": active,
         "closed": closed,
@@ -127,7 +146,8 @@ def listing(request, item):
     itemforsale = Listing.objects.filter(title=item).first()
     comments = Comment.objects.filter(post=itemforsale.id)
     highbid = Bid.objects.filter(item=itemforsale.id).first()
-    watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()   
+    watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()
+    cat = itemforsale.get_category_display()   
 
     if itemforsale == None:
         return render(request, "auctions/error.html")            
@@ -140,7 +160,8 @@ def listing(request, item):
             "commform": CommentForm,
             "comments": comments,
             "user": request.user,
-            "watchlist": watchlist
+            "watchlist": watchlist,
+            "category": cat
         })
 
 @login_required
@@ -156,10 +177,6 @@ def comment(request, item):
 
     else:
         return render(request, "auctions/error.html")
-
-def category(request):
-    return render(request, "auctions/category.html", {
-    })
 
 @login_required
 def bid(request, item):
@@ -178,7 +195,8 @@ def bid(request, item):
         bid.item = itemforsale
         bid.user = request.user
         if bid.value <= cbid:
-            return render(request, "auctions/error.html")
+            messages.error(request, 'Whoops! Your bid must be greater than the current bid.')
+            return HttpResponseRedirect(reverse("listing", args=[item]))
         else:
             bid.save()                     
             return HttpResponseRedirect(reverse("listing", args=[item]))
@@ -194,4 +212,27 @@ def end(request, item):
     itemclose.save(update_fields=['active'])
 
     return HttpResponseRedirect(reverse("listing", args=[item]))
+
+def category(request):
+    travel = Listing.objects.filter(category='TR')
+    food = Listing.objects.filter(category='FD')
+    clothing = Listing.objects.filter(category='CL')
+    adventure = Listing.objects.filter(category='AV')
+    other = Listing.objects.filter(category='OT')
+    return render(request, "auctions/category.html", {
+        "travel": travel,
+        "food": food,
+        "clothing": clothing,
+        "adventure": adventure,
+        "other": other
+    })
     
+def pick_category(request, category):
+    items = Listing.objects.filter(category=category)
+    firstitem = Listing.objects.filter(category=category).first()
+    cat = firstitem.get_category_display()
+    return render(request, "auctions/pick_category.html", {
+        "items": items,
+        "category": cat
+    })
+
