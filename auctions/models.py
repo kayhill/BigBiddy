@@ -6,6 +6,19 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+class Bid(models.Model):
+    item = models.ForeignKey('Listing', on_delete=models.CASCADE)
+    value = models.PositiveSmallIntegerField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-value']
+
+    def __str__(self):
+        return(f'${self.value}')
+    
+    
 
 class Listing(models.Model):
     title = models.CharField(max_length=64, unique=True)
@@ -29,21 +42,19 @@ class Listing(models.Model):
     ]
 
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, blank=False, null=False)
+
+    @property
+    def high_bid(self):
+        price = self.start_bid
+        hbid = self.bid_set.first()
+        if hbid:
+            price = hbid.value
+
+        return price
             
     def __str__(self):
         return(f'{self.title} listed by {self.user.username}')
 
-class Bid(models.Model):
-    item = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    value = models.PositiveSmallIntegerField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['-value']
-
-    def __str__(self):
-        return(f'${self.value}')
 
 class Comment(models.Model):
     post = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='comment')

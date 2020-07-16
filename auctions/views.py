@@ -45,10 +45,12 @@ class BidForm(forms.ModelForm):
 def index(request):
     active = Listing.objects.filter(active=True)
     closed = Listing.objects.filter(active=False)
+    
      
     return render(request, "auctions/index.html", {
         "active": active,
         "closed": closed,
+        
     })
 
 
@@ -232,7 +234,7 @@ def pick_category(request, category):
     firstitem = Listing.objects.filter(category=category).first()
     cat = firstitem.get_category_display()
     return render(request, "auctions/pick_category.html", {
-        "items": items,
+        "active": items,
         "category": cat
     })
 

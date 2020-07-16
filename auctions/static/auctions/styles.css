@@ -1,5 +1,4 @@
 body {
-    
     font-family: 'Roboto', sans-serif;
 }
 
@@ -7,10 +6,6 @@ h2 {
     font-size: 2em;
 }
 
-.list_image {
-    height: 300px;
-}
-
 form label {
-    font-size: 2em;
-}
+    font-size: 1.5em;
+}   

@@ -3,9 +3,9 @@
 {% block body %}
 
 <div class="container">
-    <div class="row">
+    <div class="row section">
         {% if travel %}
-            <a href="{% url 'pick_category' category='TR' %}"><h3>Travel</h3></a>
+            <a href="{% url 'pick_category' category='TR' %}"><h3 class="teal-text">Travel</h3></a>
             {% for t in travel %}
                 <a href="{% url 'listing' item=t.title %}"><li>{{ t.title |title }}</li></a>
             {% endfor %}
@@ -13,10 +13,11 @@
             <h3>Travel</h3>
         {% endif %}
     </div>
+    <div class="divider"></div>
 
-    <div class="row">
+    <div class="row section">
         {% if food %}
-            <a href="{% url 'pick_category' category='FD' %}"><h3>FOOD</h3></a>
+            <a href="{% url 'pick_category' category='FD' %}"><h3 class="teal-text">Food</h3></a>
             {% for f in food %}
                 <a href="{% url 'listing' item=f.title %}"><li>{{ f.title |title }}</li></a>
             {% endfor %}
@@ -24,10 +25,11 @@
             <h3>Food</h3>
         {% endif %}
     </div>
+    <div class="divider"></div>
 
-    <div class="row">
+    <div class="row section">
         {% if clothing %}
-            <a href="{% url 'pick_category' category='CL' %}"><h3>Clothing</h3></a>
+            <a href="{% url 'pick_category' category='CL' %}"><h3 class="teal-text">Clothing</h3></a>
             {% for c in clothing %}
                 <a href="{% url 'listing' item=c.title %}"><li>{{ c.title |title }}</li></a>
             {% endfor %} 
@@ -35,10 +37,11 @@
             <h3>Clothing</h3>
         {% endif %}
     </div>
+    <div class="divider"></div>
 
-    <div class="row">
+    <div class="row section">
         {% if adventure %}
-            <a href="{% url 'pick_category' category='AV' %}"><h3>Adventure</h3></a>
+            <a href="{% url 'pick_category' category='AV' %}"><h3 class="teal-text">Adventure</h3></a>
             {% for a in adventure %}
                 <a href="{% url 'listing' item=a.title %}"><li>{{ a.title |title }}</li></a>
             {% endfor %}
@@ -46,10 +49,11 @@
             <h3>Adventure</h3>
         {% endif %}
     </div>
+    <div class="divider"></div>
 
     <div class="row">
         {% if other %}
-        <a href="{% url 'pick_category' category='OT' %}"><h3>Other</h3></a>
+        <a href="{% url 'pick_category' category='OT' %}"><h3 class="teal-text">Other</h3></a>
             {% for o in other %}
                 <a href="{% url 'listing' item=o.title %}"><li>{{ o.title |title }}</li></a>
             {% endfor %}

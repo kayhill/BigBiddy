@@ -10,15 +10,16 @@
     <div class="container">
         <h3>{{ item.title |title }}</h3>
         <p class="flow-text">Posted by {{ item.user |title }} </p>
-        <p class="flow-text">{{ item.description }}
-            {% lorem %}
-        </p>
-        <p>Category: <a href="{% url 'pick_category' category='TR' %}"> {{ category |title }}</a></p>
-        <img class="list_image" src="{{ item.list_image}}" alt="Image of {{ item.title }}">
         
         
+<div class="row">
+    <div class="col s12 m8 push-m4">
+            <img class="responsive-img materialboxed" src="{{ item.list_image}}" alt="Image of {{ item.title }}">
+    </div>  
+    
+    <div class="col m4 pull-m8">
         {% if highbid %}
-            <p>Current Bid: ${{ highbid.value }} placed by {{ highbid.user }} </p>
+            <p>Current Bid: ${{ highbid.value }} placed by {{ highbid.user |title }} </p>
         {% else %}
             <p>Starting Bid: ${{ startbid }} </p>  
         {% endif %} 
@@ -38,6 +39,15 @@
                 </form>
             {% endif %}
         {% endif %}
+        <p>Category: <a href="{% url 'pick_category' category='TR' %}"> {{ category |title }}</a></p>
+    </div> 
+</div>
+
+<p class="flow-text">{{ item.description }}
+    {% lorem %}
+</p>
+
+    <div class="section">
         
         {% if item.active == True %}
             {% if item.user == user %}
@@ -49,9 +59,9 @@
             </form>
 
             {% elif user %}    
-            <h3>Place Bid</h3>
+            <h4>Place Bid</h4>
                 {% if messages %}
-                    {% for message in messages %}
+                    {% for message in messages %}   
 	                    <h5 class="red-text large">{{ message }}</h5>
 	                {% endfor %}
                 {% endif %}
@@ -60,7 +70,7 @@
             <form action="{% url 'bid' item.title %}" method="POST">
                 {% csrf_token %}
                 {{ form }}                    
-                <input class="btn waves-effect waves-light" type="submit" name="bid" value="Submit">
+                <input class="btn waves-effect waves-light" type="submit" name="bid" value="Place Bid">
             </form>
 
             {% endif %}
@@ -81,7 +91,7 @@
         {% endif %}  
     </div>
 
-    <div class="container">
+    <div class="section">
         
         {% for comment in comments %}
             <blockquote class="flow-text">{{ comment.body }} <br> posted by {{ comment.user |title}} on {{ comment.created_on }}
@@ -91,12 +101,12 @@
         
         {% if item.active %}
         
-        <h3>Add Comment</h3>
+        <h4>Add Comment</h4>
         <form action="{% url 'comment' item.title %}" method="POST">
             {% csrf_token %}
             {{ commform }}
                    
-            <input class="btn waves-effect waves-light" name="comment" type="submit" value="Submit">
+            <input class="btn waves-effect waves-light" name="comment" type="submit" value="Add Comment">
         </form>
         
         {% endif %}
