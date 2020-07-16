@@ -143,13 +143,13 @@ def watch(request):
         "user": request.user
     })
 
-
+@login_required
 def listing(request, item):
     itemforsale = Listing.objects.filter(title=item).first()
     comments = Comment.objects.filter(post=itemforsale.id)
     highbid = Bid.objects.filter(item=itemforsale.id).first()
     watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()
-    cat = itemforsale.get_category_display()   
+    cat = itemforsale.get_category_display()
 
     if itemforsale == None:
         return render(request, "auctions/error.html")            
@@ -163,7 +163,7 @@ def listing(request, item):
             "comments": comments,
             "user": request.user,
             "watchlist": watchlist,
-            "category": cat
+            "category": cat,
         })
 
 @login_required
