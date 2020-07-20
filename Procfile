@@ -1,1 +1,1 @@
-web: gunicorn bigbiddy.wsgi --log-file -
+web: gunicorn myproject.wsgi --log-file -
