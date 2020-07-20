@@ -121,3 +121,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = "/Users/SUC/Desktop/Projects/CS50-Web-Programming/commerce/static"
+
