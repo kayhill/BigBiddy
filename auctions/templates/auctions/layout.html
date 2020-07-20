@@ -6,8 +6,7 @@
         <title>{% block title %}BigBiddy{% endblock %}</title>
 
       <!--jQuery to display form choices in materialize.css-->
-      <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script>
+      <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js">
         $(document).ready(function() {
         $('select').formSelect();
       });
@@ -17,8 +16,8 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       
       <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="{% static 'auctions/materialize/css/materialize.css' %}"  media="screen,projection"/>
-        <link type="text/css" media="screen,projection" rel="stylesheet" href="{% static 'auctions/styles.css' %}">
+        <link type="text/css" rel="stylesheet" href="/static/auctions/materialize/css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" media="screen,projection" rel="stylesheet" href="/static/auctions/styles.css">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
@@ -68,8 +67,8 @@
         </main>
        
         <!--JavaScript at end of body for optimized loading-->
-        <script type="text/javascript" src="{% static 'auctions/script.js' %}"></script>
-        <script type="text/javascript" src="{% static 'auctions/materialize/js/materialize.js' %}"></script>
+        <script type="text/javascript" src="static/auctions/script.js"></script>
+        <script type="text/javascript" src="static/auctions/materialize/js/materialize.js"></script>
     </body>
   
 </html>
