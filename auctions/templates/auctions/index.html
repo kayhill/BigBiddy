@@ -30,6 +30,7 @@
                         
                         <li>Current Bid: ${{ a.high_bid }}</li>
                         <li>Description: {{ a.description }}</li>
+                        <p><a href="{% url 'listing' item=a.title %}">View this Auction</a></p>
                 </div>
             </div>
         </div>
