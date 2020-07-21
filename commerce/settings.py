@@ -136,4 +136,3 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR,'auctions/static')
 
 
 django_heroku.settings(locals())
-del DATABASES['default']['OPTIONS']['sslmode']
