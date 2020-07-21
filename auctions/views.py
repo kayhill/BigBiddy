@@ -149,7 +149,7 @@ def listing(request, item):
     comments = Comment.objects.filter(post=itemforsale.id)
     highbid = Bid.objects.filter(item=itemforsale.id).first()
     watchlist = Watch.objects.filter(user=request.user, item=itemforsale.id).first()
-    cat = itemforsale.get_category_display()
+    cat = itemforsale.get_category_display
 
     if itemforsale == None:
         return render(request, "auctions/error.html")            
