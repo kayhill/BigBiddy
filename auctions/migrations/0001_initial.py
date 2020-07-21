@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('start_bid', models.PositiveSmallIntegerField(default=0)),
                 ('list_image', models.URLField()),
                 ('active', models.BooleanField(default=True)),
-                ('current_bid', models.ForeignKey(blank=True, default=models.PositiveSmallIntegerField(default=0), null=True, on_delete=django.db.models.deletion.CASCADE, to='auctions.Bid')),
+                ('current_bid', models.ForeignKey(blank=True, default=0, null=True, on_delete=django.db.models.deletion.CASCADE, to='auctions.Bid')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
